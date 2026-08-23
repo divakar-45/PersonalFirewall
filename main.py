@@ -1,19 +1,11 @@
-from backends.mock import MockFirewallBackend
-from core.firewall import Firewall
+from capture.packet_capture import PacketCapture
 
 
 def main():
-    backend = MockFirewallBackend()
-    firewall = Firewall(backend)
+    capture = PacketCapture()
+    packets = capture.capture(count=5)
 
-    print(f"Firewall enabled: {firewall.is_enabled()}")
-    print(f"Default policy: {firewall.get_default_policy()}")
-
-    firewall.enable()
-    print(f"Firewall enabled: {firewall.is_enabled()}")
-
-    firewall.disable()
-    print(f"Firewall enabled: {firewall.is_enabled()}")
+    print(f"Captured packets: {len(packets)}")
 
 
 if __name__ == "__main__":
