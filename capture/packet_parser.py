@@ -24,11 +24,13 @@ class PacketParser:
 
         source_port = None
         destination_port = None
+        tcp_flags = None
 
         if packet.haslayer(TCP):
             protocol = "TCP"
             source_port = packet[TCP].sport
             destination_port = packet[TCP].dport
+            tcp_flags = str(packet[TCP].flags)
         elif packet.haslayer(UDP):
             protocol = "UDP"
             source_port = packet[UDP].sport
@@ -42,5 +44,6 @@ class PacketParser:
             protocol=protocol,
             source_port=source_port,
             destination_port=destination_port,
-            direction=direction
+            direction=direction,
+            tcp_flags=tcp_flags
         )

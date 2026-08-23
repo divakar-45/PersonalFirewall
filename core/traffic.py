@@ -9,3 +9,4 @@ class Traffic:
     source_port: int | None
     destination_port: int | None
     direction: str
+    tcp_flags: str | None = None
