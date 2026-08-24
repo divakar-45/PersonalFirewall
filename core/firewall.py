@@ -1,5 +1,6 @@
 from capture.packet_capture import PacketCapture
 from core.connection_tracker import ConnectionTracker
+from core.logger import FirewallLogger
 from core.rule_engine import RuleEngine
 
 
@@ -8,6 +9,7 @@ class Firewall:
         self.capture = PacketCapture(interface)
         self.engine = RuleEngine()
         self.tracker = ConnectionTracker()
+        self.logger = FirewallLogger()
         self.rules = []
 
     def add_rule(self, rule):
@@ -33,7 +35,12 @@ class Firewall:
                         traffic
                     )
 
-            elif state in ("ESTABLISHED", "ACTIVE", "SYN_SENT", "SYN_RECEIVED"):
+            elif state in (
+                "ESTABLISHED",
+                "ACTIVE",
+                "SYN_SENT",
+                "SYN_RECEIVED"
+            ):
                 decision = "ALLOW"
 
                 if traffic.protocol == "TCP":
@@ -51,3 +58,9 @@ class Firewall:
             print(traffic)
             print("State:", state or "NEW")
             print("Decision:", decision)
+
+            self.logger.log(
+                traffic,
+                state,
+                decision
+            )
