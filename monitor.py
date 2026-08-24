@@ -1,9 +1,9 @@
-from core.dashboard import SecurityDashboard
+from core.monitor_engine import MonitorEngine
 
 
 def main():
-    dashboard = SecurityDashboard()
-    dashboard.display()
+    monitor = MonitorEngine()
+    monitor.run()
 
 
 if __name__ == "__main__":
