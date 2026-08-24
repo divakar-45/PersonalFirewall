@@ -1,3 +1,10 @@
+from config.monitoring import (
+    LOG_FILE,
+    ALERT_STATE_FILE,
+    BLOCK_THRESHOLD,
+    SOURCE_THRESHOLD
+)
+
 from core.alert_detector import AlertDetector
 from core.alert_manager import AlertManager
 from core.log_analyzer import LogAnalyzer
@@ -6,14 +13,14 @@ from core.log_analyzer import LogAnalyzer
 class SecurityDashboard:
     def __init__(
         self,
-        log_file="logs/firewall.log",
-        state_file="logs/alert_state.json"
+        log_file=LOG_FILE,
+        state_file=ALERT_STATE_FILE
     ):
         self.analyzer = LogAnalyzer(log_file)
 
         self.detector = AlertDetector(
-            block_threshold=5,
-            source_threshold=5
+            block_threshold=BLOCK_THRESHOLD,
+            source_threshold=SOURCE_THRESHOLD
         )
 
         self.manager = AlertManager(
