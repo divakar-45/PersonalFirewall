@@ -1,0 +1,42 @@
+[
+    {
+        "action": "ALLOW",
+        "priority": 10,
+        "direction": "OUTBOUND",
+        "protocol": "TCP",
+        "source_ip": "ANY",
+        "destination_ip": "ANY",
+        "source_port": null,
+        "destination_port": 443
+    },
+    {
+        "action": "ALLOW",
+        "priority": 10,
+        "direction": "OUTBOUND",
+        "protocol": "TCP",
+        "source_ip": "ANY",
+        "destination_ip": "ANY",
+        "source_port": null,
+        "destination_port": 443
+    },
+    {
+        "action": "ALLOW",
+        "priority": 20,
+        "direction": "OUTBOUND",
+        "protocol": "UDP",
+        "source_ip": "ANY",
+        "destination_ip": "ANY",
+        "source_port": null,
+        "destination_port": 53
+    },
+    {
+        "action": "BLOCK",
+        "priority": 1000,
+        "direction": "ANY",
+        "protocol": "ANY",
+        "source_ip": "ANY",
+        "destination_ip": "ANY",
+        "source_port": null,
+        "destination_port": null
+    }
+]
