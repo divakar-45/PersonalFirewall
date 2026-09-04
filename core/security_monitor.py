@@ -2,7 +2,8 @@ from config.monitoring import (
     LOG_FILE,
     ALERT_STATE_FILE,
     BLOCK_THRESHOLD,
-    SOURCE_THRESHOLD
+    SOURCE_THRESHOLD,
+    RECENT_EVENTS_COUNT
 )
 
 from core.alert_detector import AlertDetector
@@ -35,17 +36,31 @@ class SecurityMonitor:
     def run(self):
         events = self.analyzer.load_events()
 
-        alerts = self.detector.detect(events)
+        recent_events = self.analyzer.recent_events(
+            RECENT_EVENTS_COUNT
+        )
 
-        new_alerts = self.manager.filter_new(alerts)
+        alerts = self.detector.detect(
+            recent_events
+        )
+
+        new_alerts = self.manager.filter_new(
+            alerts
+        )
 
         print("EVENTS ANALYZED:", len(events))
+        print(
+            "RECENT EVENTS USED FOR DETECTION:",
+            len(recent_events)
+        )
         print("ALERTS DETECTED:", len(alerts))
         print("NEW ALERTS:", len(new_alerts))
         print()
 
         for alert in new_alerts:
-            print(self.reporter.format_alert(alert))
+            print(
+                self.reporter.format_alert(alert)
+            )
             print()
 
             self.alert_logger.log(alert)

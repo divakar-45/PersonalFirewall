@@ -1,14 +1,16 @@
-from collections import Counter
+from collections import Counter, defaultdict
 
 
 class AlertDetector:
     def __init__(
         self,
         block_threshold=5,
-        source_threshold=5
+        source_threshold=5,
+        port_scan_threshold=5
     ):
         self.block_threshold = block_threshold
         self.source_threshold = source_threshold
+        self.port_scan_threshold = port_scan_threshold
 
     def excessive_blocks(self, events):
         blocked = [
@@ -77,10 +79,57 @@ class AlertDetector:
 
         return alerts
 
+    def port_scan_detection(self, events):
+        blocked_ports = defaultdict(set)
+
+        for event in events:
+            if event.get("decision") != "BLOCK":
+                continue
+
+            if event.get("protocol") != "TCP":
+                continue
+
+            source_ip = event.get(
+                "source_ip",
+                "UNKNOWN"
+            )
+
+            destination_port = event.get(
+                "destination_port"
+            )
+
+            if destination_port is None:
+                continue
+
+            blocked_ports[source_ip].add(
+                destination_port
+            )
+
+        alerts = []
+
+        for source_ip, ports in blocked_ports.items():
+            if len(ports) >= self.port_scan_threshold:
+                alerts.append({
+                    "type": "PORT_SCAN",
+                    "severity": "HIGH",
+                    "source_ip": source_ip,
+                    "ports": sorted(ports),
+                    "port_count": len(ports),
+                    "message": (
+                        f"Source {source_ip} attempted "
+                        f"connections to {len(ports)} "
+                        f"different blocked TCP ports"
+                    )
+                })
+
+        return alerts
+
     def detect(self, events):
         alerts = []
 
-        excessive_blocks = self.excessive_blocks(events)
+        excessive_blocks = self.excessive_blocks(
+            events
+        )
 
         if excessive_blocks:
             alerts.append(excessive_blocks)
@@ -91,6 +140,10 @@ class AlertDetector:
 
         alerts.extend(
             self.repeated_blocked_destinations(events)
+        )
+
+        alerts.extend(
+            self.port_scan_detection(events)
         )
 
         return alerts

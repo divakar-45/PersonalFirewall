@@ -1,11 +1,22 @@
-from capture.packet_capture import PacketCapture
+from core.firewall import Firewall
 
 
 def main():
-    capture = PacketCapture()
-    packets = capture.capture(count=5)
+    print("=" * 50)
+    print("             PERSONAL FIREWALL")
+    print("=" * 50)
+    print()
 
-    print(f"Captured packets: {len(packets)}")
+    firewall = Firewall()
+
+    print("Firewall initialized.")
+    print(f"Loaded rules: {len(firewall.rules)}")
+    print()
+
+    firewall.process(count=10)
+
+    print()
+    print("Firewall processing completed.")
 
 
 if __name__ == "__main__":

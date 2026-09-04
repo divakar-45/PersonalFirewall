@@ -12,18 +12,28 @@ class MonitorEngine:
     def __init__(
         self,
         log_file="logs/firewall.log",
-        poll_interval=2
+        poll_interval=2,
+        state_file=None
     ):
         self.log_file = Path(log_file)
         self.poll_interval = poll_interval
 
         self.detector = AlertDetector(
             block_threshold=5,
-            source_threshold=5
+            source_threshold=5,
+            port_scan_threshold=5
         )
 
+        if state_file is None:
+            if self.log_file.name == "firewall.log":
+                state_file = "logs/alert_state.json"
+            else:
+                state_file = self.log_file.with_name(
+                    f"{self.log_file.stem}_alert_state.json"
+                )
+
         self.manager = AlertManager(
-            state_file="logs/alert_state.json"
+            state_file=state_file
         )
 
         self.alert_logger = AlertLogger()

@@ -2,7 +2,7 @@ from config.monitoring import (
     LOG_FILE,
     ALERT_STATE_FILE,
     BLOCK_THRESHOLD,
-    SOURCE_THRESHOLD
+    SOURCE_THRESHOLD,
 )
 
 from core.alert_detector import AlertDetector
@@ -29,15 +29,14 @@ class SecurityDashboard:
 
     def generate(self):
         events = self.analyzer.load_events()
-
         summary = self.analyzer.summary()
         alerts = self.detector.detect(events)
 
         return {
-            "events": events,
-            "summary": summary,
-            "alerts": alerts
-        }
+        "events": events,
+        "summary": summary,
+        "alerts": alerts
+    }
 
     def display(self):
         data = self.generate()
