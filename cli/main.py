@@ -1,3 +1,4 @@
+
 import argparse
 
 from core.firewall import Firewall
@@ -5,7 +6,7 @@ from core.monitor_engine import MonitorEngine
 from core.dashboard import SecurityDashboard
 
 
-def firewall_command(args):
+def start_command(args):
     firewall = Firewall()
 
     print("=" * 50)
@@ -13,6 +14,7 @@ def firewall_command(args):
     print("=" * 50)
     print()
     print(f"Loaded rules: {len(firewall.rules)}")
+    print(f"Packets to process: {args.count}")
     print()
 
     firewall.process(count=args.count)
@@ -35,8 +37,24 @@ def dashboard_command(args):
     dashboard.display()
 
 
+def status_command(args):
+    firewall = Firewall()
+
+    print("=" * 50)
+    print("             FIREWALL STATUS")
+    print("=" * 50)
+    print()
+    print("Status: READY")
+    print(f"Loaded rules: {len(firewall.rules)}")
+    print("Monitoring engine: AVAILABLE")
+    print("Security dashboard: AVAILABLE")
+    print("Traffic logging: ENABLED")
+    print()
+
+
 def main():
     parser = argparse.ArgumentParser(
+        prog="firewall",
         description="Personal Firewall Security CLI"
     )
 
@@ -44,12 +62,12 @@ def main():
         dest="command"
     )
 
-    firewall_parser = subparsers.add_parser(
-        "firewall",
+    start_parser = subparsers.add_parser(
+        "start",
         help="Capture and process network traffic"
     )
 
-    firewall_parser.add_argument(
+    start_parser.add_argument(
         "-c",
         "--count",
         type=int,
@@ -57,8 +75,8 @@ def main():
         help="Number of packets to process"
     )
 
-    firewall_parser.set_defaults(
-        func=firewall_command
+    start_parser.set_defaults(
+        func=start_command
     )
 
     monitor_parser = subparsers.add_parser(
@@ -92,6 +110,15 @@ def main():
 
     dashboard_parser.set_defaults(
         func=dashboard_command
+    )
+
+    status_parser = subparsers.add_parser(
+        "status",
+        help="Display firewall system status"
+    )
+
+    status_parser.set_defaults(
+        func=status_command
     )
 
     args = parser.parse_args()

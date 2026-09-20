@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "personal-firewall"
+version = "0.1.0"
+description = "Terminal-based personal firewall and network security monitoring system"
+requires-python = ">=3.10"
+dependencies = [
+    "scapy==2.7.0"
+]
+
+[project.scripts]
+firewall = "cli.main:main"
+
+[tool.setuptools]
+packages = ["cli", "core", "capture", "config", "backends"]
