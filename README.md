@@ -336,4 +336,78 @@ python -m tests.test_alert_detector
 python -m tests.test_alert_manager
 ```
 
-Run secu
+Run security monitoring tests:
+
+```powershell
+python -m tests.test_security_monitor
+python -m tests.test_monitor_engine
+```
+
+Run the complete end-to-end test:
+
+```powershell
+python -m tests.test_end_to_end
+```
+
+Python compilation can also be checked with:
+
+```powershell
+python -m compileall core config capture cli
+```
+
+## Security Model
+
+The project currently implements user-space firewall decision logic and security monitoring.
+
+Captured traffic is processed by the project, evaluated against configured rules, and assigned an `ALLOW` or `BLOCK` decision. Events are then logged and analyzed by the security monitoring components.
+
+The current implementation should not be considered a replacement for the Windows operating-system firewall or a production network firewall.
+
+## Future Scope
+
+Future development can include:
+
+* OS-level packet enforcement
+* Windows Filtering Platform integration
+* Linux firewall backend integration
+* Cross-platform firewall backends
+* Advanced traffic correlation
+* Context-aware alert severity
+* More sophisticated port-scan analysis
+* Application-aware filtering
+* Persistent background service
+* Graphical user interface
+* Configuration management interface
+* Expanded security analytics
+* Additional detection techniques
+* Improved deployment and installation experience
+
+## Project Goal
+
+The goal of this project is to build a practical understanding of defensive network security by implementing the major stages of a firewall and security monitoring pipeline:
+
+```text
+Capture
+   ↓
+Parse
+   ↓
+Analyze
+   ↓
+Evaluate Rules
+   ↓
+ALLOW / BLOCK
+   ↓
+Log
+   ↓
+Detect
+   ↓
+Alert
+   ↓
+Monitor
+   ↓
+Report
+```
+
+This project is part of my cybersecurity portfolio and focuses on practical implementation of networking and defensive security concepts using Python.
+
+
